@@ -15,4 +15,22 @@
     <string name="customer">Vásárló</string>
     <string name="seller">Eladó</string>
     <string name="product_description">Termék leírása.</string>
+    <string name="notes">Jegyzetek</string>
+    <string name="users">Felhasználók</string>
+    <string name="edit_note_button">MÓDOSÍTÁS</string>
+    <string name="note_desc">Jegyzet leírás</string>
+    <string name="note_title">Jegyzet cím</string>
+
+    <array name="note_title">
+        <item>asasdf</item>
+        <item>ertfer</item>
+        <item>erger</item>
+    </array>
+
+    <array name="note_desc">
+        <item>asasdf</item>
+        <item>ertfer</item>
+        <item>erger</item>
+    </array>
+
 </resources>
