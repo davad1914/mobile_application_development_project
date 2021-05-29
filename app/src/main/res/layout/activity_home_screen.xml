@@ -30,6 +30,7 @@
             android:layout_marginLeft="@dimen/default_margin_side"
             android:layout_marginRight="@dimen/default_margin_side"
             android:layout_weight="1"
-            android:text="@string/users" />
+            android:onClick="goRoleList"
+            android:text="@string/roles" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

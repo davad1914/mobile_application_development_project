@@ -32,6 +32,12 @@ public class HomeScreenActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void goRoleList(View view){
+        Intent intent = new Intent(this, RoleListActivity.class);
+        intent.putExtra("SECRET_KEY", SECRET_KEY);
+        startActivity(intent);
+    }
+
     @Override
     protected void onResume() {
         super.onResume();

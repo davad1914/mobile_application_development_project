@@ -5,32 +5,31 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.Date;
 
-public class NoteListActivity extends AppCompatActivity {
+import hu.david.mobileproject.models.UserRole;
 
-    private static final String LOG_TAG = NoteListActivity.class.getName();
+public class RoleListActivity extends AppCompatActivity {
+
+    private static final String LOG_TAG = RoleListActivity.class.getName();
     private static final String PREF_KEY = MainActivity.class.getPackage().toString();
     private FirebaseUser user;
 
     private RecyclerView mRecyclerView;
-    private ArrayList<Note> mItemList;
-    private NoteAdapter mAdapter;
+    private ArrayList<UserRole> mItemList;
+    private RoleAdapter mAdapter;
 
     private int gridNumber = 1;
 
@@ -40,7 +39,7 @@ public class NoteListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_note_list);
+        setContentView(R.layout.activity_role_list);
 
         user = FirebaseAuth.getInstance().getCurrentUser();
         if(user != null) {
@@ -60,22 +59,22 @@ public class NoteListActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(new GridLayoutManager(this, gridNumber));
         mItemList = new ArrayList<>();
 
-        mAdapter = new NoteAdapter(this, mItemList);
+        mAdapter = new RoleAdapter(this, mItemList);
 
         mRecyclerView.setAdapter(mAdapter);
 
         //Firestore peldanyositasa
         mFirestore = FirebaseFirestore.getInstance();
-        mItems = mFirestore.collection("notes");
+        mItems = mFirestore.collection("roles");
         queryData();
     }
 
     private void queryData() {
         mItemList.clear();
 
-        mItems.orderBy("title").get().addOnSuccessListener(queryDocumentSnapshots -> {
+        mItems.orderBy("involvementRole").get().addOnSuccessListener(queryDocumentSnapshots -> {
             for(QueryDocumentSnapshot document : queryDocumentSnapshots){
-                Note item = document.toObject(Note.class);
+                UserRole item = document.toObject(UserRole.class);
                 mItemList.add(item);
             }
 
@@ -91,18 +90,19 @@ public class NoteListActivity extends AppCompatActivity {
     private void initializeData() {
         // Get the resources from the XML file.
         String[] itemsList = getResources()
-                .getStringArray(R.array.note_desc);
+                .getStringArray(R.array.role_id);
         String[] itemsInfo = getResources()
-                .getStringArray(R.array.note_title);
+                .getStringArray(R.array.role_href);
+        String[] itemsInv = getResources()
+                .getStringArray(R.array.role_involvementRole);
 
-        Date date = new Date(System.currentTimeMillis());
         // Create the ArrayList of Sports objects with the titles and
         // information about each sport.
         for (int i = 0; i < itemsList.length; i++) {
-            mItems.add(new Note(
+            mItems.add(new UserRole(
                     itemsList[i],
                     itemsInfo[i],
-                    date));
+                    itemsInv[i]));
         }
     }
 

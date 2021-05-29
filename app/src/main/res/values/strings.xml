@@ -20,6 +20,8 @@
     <string name="edit_note_button">MÓDOSÍTÁS</string>
     <string name="note_desc">Jegyzet leírás</string>
     <string name="note_title">Jegyzet cím</string>
+    <string name="roles">Jogosultságok</string>
+    <string name="delete">Törlés</string>
 
     <array name="note_title">
         <item>asasdf</item>
@@ -31,6 +33,24 @@
         <item>asasdf</item>
         <item>ertfer</item>
         <item>erger</item>
+    </array>
+
+    <array name="role_id">
+        <item>UR123</item>
+        <item>UR321</item>
+        <item>UR231</item>
+    </array>
+
+    <array name="role_href">
+        <item>endpoint/usersandroles/v1/role/UR123</item>
+        <item>endpoint/usersandroles/v1/role/UR321</item>
+        <item>endpoint/usersandroles/v1/role/UR231</item>
+    </array>
+
+    <array name="role_involvementRole">
+        <item>configure IPTV and watch news</item>
+        <item>configure IPTV</item>
+        <item>watch news</item>
     </array>
 
 </resources>
