@@ -1,8 +1,9 @@
 package hu.david.mobileproject;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Note {
+public class Note implements Serializable {
     private String id;
     private String userId;
     private String title;

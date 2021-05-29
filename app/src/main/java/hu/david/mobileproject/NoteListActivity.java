@@ -115,8 +115,8 @@ public class NoteListActivity extends AppCompatActivity {
     }
 
     public void editItem(Note item){
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra("note_item", item._getId());
+        Intent intent = new Intent(this, UpdateNoteActivity.class);
+        intent.putExtra("note_item", item);
         startActivity(intent);
     }
 
