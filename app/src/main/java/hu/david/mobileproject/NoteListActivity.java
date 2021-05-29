@@ -5,16 +5,21 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.content.res.TypedArray;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -26,6 +31,7 @@ public class NoteListActivity extends AppCompatActivity {
 
     private static final String LOG_TAG = NoteListActivity.class.getName();
     private static final String PREF_KEY = MainActivity.class.getPackage().toString();
+    private static final int SECRET_KEY = 99;
     private FirebaseUser user;
 
     private RecyclerView mRecyclerView;
@@ -70,12 +76,19 @@ public class NoteListActivity extends AppCompatActivity {
         queryData();
     }
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        queryData();
+    }
+
     private void queryData() {
         mItemList.clear();
 
         mItems.orderBy("title").get().addOnSuccessListener(queryDocumentSnapshots -> {
             for(QueryDocumentSnapshot document : queryDocumentSnapshots){
                 Note item = document.toObject(Note.class);
+                item.setId(document.getId());
                 mItemList.add(item);
             }
 
@@ -86,6 +99,25 @@ public class NoteListActivity extends AppCompatActivity {
 
             mAdapter.notifyDataSetChanged();
         });
+    }
+
+    public void deleteItem(Note item) {
+        DocumentReference ref = mItems.document(item._getId());
+        ref.delete()
+                .addOnSuccessListener(success -> {
+                    Log.d(LOG_TAG, "Item is successfully deleted: " + item._getId());
+                })
+                .addOnFailureListener(fail -> {
+                    Toast.makeText(this, "Item " + item._getId() + " cannot be deleted.", Toast.LENGTH_LONG).show();
+                });
+
+        queryData();
+    }
+
+    public void editItem(Note item){
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra("note_item", item._getId());
+        startActivity(intent);
     }
 
     private void initializeData() {
@@ -106,6 +138,12 @@ public class NoteListActivity extends AppCompatActivity {
         }
     }
 
+    public void goToAdd(){
+        Intent intent = new Intent(this, AddNoteActivity.class);
+        intent.putExtra("SECRET_KEY", SECRET_KEY);
+        startActivity(intent);
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
@@ -122,6 +160,9 @@ public class NoteListActivity extends AppCompatActivity {
                 FirebaseAuth.getInstance().signOut();
                 finish();
                 return true;
+            case R.id.addMenu:
+                Log.d(LOG_TAG, "Add clicked!");
+                goToAdd();
             default:
                 return super.onOptionsItemSelected(item);
         }

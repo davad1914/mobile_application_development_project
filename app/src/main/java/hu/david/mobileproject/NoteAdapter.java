@@ -102,6 +102,9 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> im
         public void bindTo(Note currentItem) {
             mTitleText.setText(currentItem.getTitle());
             mDescText.setText(currentItem.getDesc());
+
+            itemView.findViewById(R.id.delete).setOnClickListener(view -> ((NoteListActivity)mContext).deleteItem(currentItem));
+            itemView.findViewById(R.id.edit).setOnClickListener(view -> ((NoteListActivity)mContext).editItem(currentItem));
         }
     }
 }

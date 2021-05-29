@@ -57,7 +57,7 @@ public class HomeScreenActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
-        getMenuInflater().inflate(R.menu.note_menu, menu);
+        getMenuInflater().inflate(R.menu.home_menu, menu);
         MenuItem menuItem = menu.findItem(R.id.logoutBar);
         return true;
     }

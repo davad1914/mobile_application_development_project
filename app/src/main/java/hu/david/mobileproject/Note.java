@@ -3,6 +3,7 @@ package hu.david.mobileproject;
 import java.util.Date;
 
 public class Note {
+    private String id;
     private String userId;
     private String title;
     private String desc;
@@ -39,5 +40,13 @@ public class Note {
 
     public void setDesc(String desc) {
         this.desc = desc;
+    }
+
+    public String _getId(){
+        return id;
+    }
+
+    public void setId(String id){
+        this.id = id;
     }
 }
