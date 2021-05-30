@@ -24,6 +24,14 @@ public class HomeScreenActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_screen);
         checkUser();
+
+        Bundle bundle = getIntent().getExtras();
+        int secret_key = bundle.getInt("SECRET_KEY");
+        //int secret_key = getIntent().getIntExtra("SECRET_KEY", 0);
+
+        if (secret_key != 99) {
+            finish();
+        }
     }
 
     public void goNoteList(View view){

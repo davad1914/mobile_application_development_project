@@ -12,8 +12,8 @@ public class Note implements Serializable {
 
     public Note() {}
 
-    public Note(String title, String desc, Date createDate) {
-        this.userId = "valami";
+    public Note(String userId, String title, String desc, Date createDate) {
+        this.userId = userId;
         this.title = title;
         this.desc = desc;
         this.createDate = createDate;
@@ -49,5 +49,9 @@ public class Note implements Serializable {
 
     public void setId(String id){
         this.id = id;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }

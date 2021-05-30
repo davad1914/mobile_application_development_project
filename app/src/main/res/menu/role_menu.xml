@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/appBarSwitch"
+        android:title="Switch"
+        app:actionLayout="@layout/switch_item"
+        app:actionViewClass="androidx.appcompat.widget.SwitchCompat"
+        android:tooltipText="Nézet"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/logoutBar"
+        android:title="Kijelentkezés"
+        />
+
+
+</menu>

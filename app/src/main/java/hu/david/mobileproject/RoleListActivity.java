@@ -2,6 +2,7 @@ package hu.david.mobileproject;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -41,19 +42,15 @@ public class RoleListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_role_list);
 
-        user = FirebaseAuth.getInstance().getCurrentUser();
-        if(user != null) {
-            Log.d(LOG_TAG, "Authenticated user!");
-        } else {
-            Log.d(LOG_TAG, "Unauthenticated user!");
+        Bundle bundle = getIntent().getExtras();
+        int secret_key = bundle.getInt("SECRET_KEY");
+        //int secret_key = getIntent().getIntExtra("SECRET_KEY", 0);
+
+        if (secret_key != 99) {
             finish();
         }
 
-        //firestore kodok
-
-
-
-        //firestore kodok vege
+        checkUser();
 
         mRecyclerView = findViewById(R.id.recyclerView);
         mRecyclerView.setLayoutManager(new GridLayoutManager(this, gridNumber));
@@ -106,11 +103,25 @@ public class RoleListActivity extends AppCompatActivity {
         }
     }
 
+    private void changeSpanCount(int spanCount) {
+        GridLayoutManager layoutManager = (GridLayoutManager) mRecyclerView.getLayoutManager();
+        layoutManager.setSpanCount(spanCount);
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
-        getMenuInflater().inflate(R.menu.note_menu, menu);
-        MenuItem menuItem = menu.findItem(R.id.logoutBar);
+        getMenuInflater().inflate(R.menu.role_menu, menu);
+        MenuItem menuItem = menu.findItem(R.id.appBarSwitch);
+        SwitchCompat switchButton = (SwitchCompat) menuItem.getActionView();
+
+        switchButton.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (switchButton.isChecked()){
+                changeSpanCount(2);
+            }else{
+                changeSpanCount(1);
+            }
+        });
         return true;
     }
 
@@ -130,5 +141,15 @@ public class RoleListActivity extends AppCompatActivity {
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         return super.onPrepareOptionsMenu(menu);
+    }
+
+    public void checkUser(){
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        if(user != null) {
+            Log.d(LOG_TAG, "Authenticated user!");
+        } else {
+            Log.d(LOG_TAG, "Unauthenticated user!");
+            finish();
+        }
     }
 }

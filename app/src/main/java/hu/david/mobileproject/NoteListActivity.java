@@ -2,6 +2,7 @@ package hu.david.mobileproject;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.MenuItemCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -13,6 +14,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -48,19 +50,15 @@ public class NoteListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_note_list);
 
-        user = FirebaseAuth.getInstance().getCurrentUser();
-        if(user != null) {
-            Log.d(LOG_TAG, "Authenticated user!");
-        } else {
-            Log.d(LOG_TAG, "Unauthenticated user!");
+        checkUser();
+
+        Bundle bundle = getIntent().getExtras();
+        int secret_key = bundle.getInt("SECRET_KEY");
+        //int secret_key = getIntent().getIntExtra("SECRET_KEY", 0);
+
+        if (secret_key != 99) {
             finish();
         }
-
-        //firestore kodok
-
-
-
-        //firestore kodok vege
 
         mRecyclerView = findViewById(R.id.recyclerView);
         mRecyclerView.setLayoutManager(new GridLayoutManager(this, gridNumber));
@@ -85,7 +83,9 @@ public class NoteListActivity extends AppCompatActivity {
     private void queryData() {
         mItemList.clear();
 
-        mItems.orderBy("title").get().addOnSuccessListener(queryDocumentSnapshots -> {
+        String userId = user.getUid();
+
+        mItems.whereEqualTo("userId", userId).get().addOnSuccessListener(queryDocumentSnapshots -> {
             for(QueryDocumentSnapshot document : queryDocumentSnapshots){
                 Note item = document.toObject(Note.class);
                 item.setId(document.getId());
@@ -93,8 +93,9 @@ public class NoteListActivity extends AppCompatActivity {
             }
 
             if(mItemList.size() == 0){
-                initializeData();
-                queryData();
+                //initializeData();
+                //queryData();
+                Toast.makeText(this, "Nincs megjeleníthető elem!", Toast.LENGTH_SHORT).show();
             }
 
             mAdapter.notifyDataSetChanged();
@@ -132,6 +133,7 @@ public class NoteListActivity extends AppCompatActivity {
         // information about each sport.
         for (int i = 0; i < itemsList.length; i++) {
             mItems.add(new Note(
+                    "none",
                     itemsList[i],
                     itemsInfo[i],
                     date));
@@ -148,7 +150,23 @@ public class NoteListActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.note_menu, menu);
-        MenuItem menuItem = menu.findItem(R.id.logoutBar);
+        MenuItem menuItem = menu.findItem(R.id.searchBar);
+
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(menuItem);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                Log.d(LOG_TAG, s);
+                mAdapter.getFilter().filter(s);
+                return false;
+            }
+        });
+
         return true;
     }
 
@@ -171,5 +189,15 @@ public class NoteListActivity extends AppCompatActivity {
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         return super.onPrepareOptionsMenu(menu);
+    }
+
+    private void checkUser(){
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        if(user != null) {
+            Log.d(LOG_TAG, "Authenticated user!");
+        } else {
+            Log.d(LOG_TAG, "Unauthenticated user!");
+            finish();
+        }
     }
 }

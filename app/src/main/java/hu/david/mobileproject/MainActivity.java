@@ -127,6 +127,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void goNotes(){
         Intent intent = new Intent(this, HomeScreenActivity.class);
+        intent.putExtra("SECRET_KEY", SECRET_KEY);
         startActivity(intent);
     }
 

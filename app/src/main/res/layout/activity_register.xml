@@ -6,6 +6,13 @@
     android:layout_height="wrap_content"
     tools:context=".RegisterActivity">
 
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleType="centerCrop"
+        android:src="@drawable/image"/>
+
     <TextView
         android:id="@+id/registrationTextView"
         android:layout_width="match_parent"

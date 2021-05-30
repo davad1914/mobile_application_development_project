@@ -4,13 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     tools:context=".HomeScreenActivity">
 
     <Button
         android:id="@+id/notesButton"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_weight="1"
         android:insetTop="0dp"
         android:insetBottom="0dp"
@@ -18,17 +18,18 @@
         android:onClick="goNoteList"
         android:text="@string/notes" />
 
+
     <View
-        android:id="@+id/divider"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:id="@+id/divider2"
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
         android:layout_weight="0"
         android:background="?android:attr/listDivider" />
 
     <Button
         android:id="@+id/usersButton"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_weight="1"
         android:insetTop="0dp"
         android:insetBottom="0dp"
