@@ -124,8 +124,10 @@ public class HomeScreenActivity extends AppCompatActivity implements SensorEvent
                 e.printStackTrace();
             }
         }else{
-            mp.stop();
-            isRunning = false;
+            if(mp != null) {
+                mp.stop();
+                isRunning = false;
+            }
         }
 
     }
