@@ -104,8 +104,10 @@ public class HomeScreenActivity extends AppCompatActivity implements SensorEvent
     @Override
     public void onPause() {
         super.onPause();
-        mp.stop();
-        isRunning = false;
+        if (mp != null){
+            mp.stop();
+            isRunning = false;
+        }
         sensorManager.unregisterListener(this);
     }
 
