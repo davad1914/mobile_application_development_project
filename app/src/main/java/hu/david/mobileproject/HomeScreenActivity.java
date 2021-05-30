@@ -3,7 +3,13 @@ package hu.david.mobileproject;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -13,11 +19,19 @@ import android.view.View;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-public class HomeScreenActivity extends AppCompatActivity {
+import java.io.IOException;
 
-    private static final String LOG_TAG = NoteListActivity.class.getName();
+public class HomeScreenActivity extends AppCompatActivity implements SensorEventListener {
+
+    final private int REQUEST_CODE_ASK_PERMISSIONS = 123;
+    private static final String LOG_TAG = HomeScreenActivity.class.getName();
     private static final int SECRET_KEY = 99;
     private FirebaseUser user;
+
+    Sensor sensor;
+    SensorManager sensorManager;
+    boolean isRunning = false;
+    MediaPlayer mp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +46,9 @@ public class HomeScreenActivity extends AppCompatActivity {
         if (secret_key != 99) {
             finish();
         }
+
+        sensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
+        sensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
     }
 
     public void goNoteList(View view){
@@ -44,12 +61,6 @@ public class HomeScreenActivity extends AppCompatActivity {
         Intent intent = new Intent(this, RoleListActivity.class);
         intent.putExtra("SECRET_KEY", SECRET_KEY);
         startActivity(intent);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        checkUser();
     }
 
     public void checkUser(){
@@ -82,4 +93,41 @@ public class HomeScreenActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        checkUser();
+        sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mp.stop();
+        isRunning = false;
+        sensorManager.unregisterListener(this);
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent sensorEvent) {
+        if(sensorEvent.values[0] > 400 && isRunning == false) {
+            isRunning = true;
+            mp = new MediaPlayer();
+            try{
+                mp.setDataSource("https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3");
+                mp.prepare();
+                mp.start();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }else{
+            mp.stop();
+            isRunning = false;
+        }
+
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int i) { }
 }

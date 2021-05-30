@@ -25,7 +25,7 @@ import hu.david.mobileproject.models.UserRole;
 public class RoleListActivity extends AppCompatActivity {
 
     private static final String LOG_TAG = RoleListActivity.class.getName();
-    private static final String PREF_KEY = MainActivity.class.getPackage().toString();
+    private static final String PREF_KEY = RoleListActivity.class.getPackage().toString();
     private FirebaseUser user;
 
     private RecyclerView mRecyclerView;
@@ -69,7 +69,7 @@ public class RoleListActivity extends AppCompatActivity {
     private void queryData() {
         mItemList.clear();
 
-        mItems.orderBy("involvementRole").get().addOnSuccessListener(queryDocumentSnapshots -> {
+        mItems.orderBy("involvementRole").limit(15).get().addOnSuccessListener(queryDocumentSnapshots -> {
             for(QueryDocumentSnapshot document : queryDocumentSnapshots){
                 UserRole item = document.toObject(UserRole.class);
                 mItemList.add(item);

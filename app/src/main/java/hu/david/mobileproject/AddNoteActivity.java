@@ -16,7 +16,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.Date;
 
 public class AddNoteActivity extends AppCompatActivity {
-    private static final String LOG_TAG = NoteListActivity.class.getName();
+    private static final String LOG_TAG = AddNoteActivity.class.getName();
+
+    private NotificationHandler mNotificationHandler;
 
     private FirebaseAuth mAuth;
     private FirebaseUser user;
@@ -50,6 +52,8 @@ public class AddNoteActivity extends AppCompatActivity {
 
         user = FirebaseAuth.getInstance().getCurrentUser();
         userId = user.getUid();
+
+        mNotificationHandler = new NotificationHandler(this);
     }
 
     public void addNote(View view){
@@ -76,5 +80,19 @@ public class AddNoteActivity extends AppCompatActivity {
             Log.d(LOG_TAG, "Unauthenticated user!");
             finish();
         }
+    }
+
+    @Override
+    protected void onPause() {
+        Log.d(LOG_TAG, "onPause");
+        String message;
+        if(title.getText().toString().equals("")){
+            message = "A jegyzet létrehozása nem történt meg!";
+        }else{
+            message = title.getText().toString() + " létrehozása nem történt meg!";
+        }
+
+        this.mNotificationHandler.send(message);
+        super.onPause();
     }
 }
